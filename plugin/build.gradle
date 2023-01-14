@@ -1,0 +1,37 @@
+plugins {
+    id 'kotlin'
+    id 'kotlin-kapt'
+    id 'maven-publish'
+}
+
+dependencies {
+    implementation gradleApi() // 需要在 settings.gradle 设置 RepositoriesMode.PREFER_PROJECT
+    implementation localGroovy()
+
+    implementation 'org.ow2.asm:asm:9.3'
+    implementation 'org.ow2.asm:asm-commons:9.3'
+    implementation 'org.ow2.asm:asm-analysis:9.3'
+    implementation 'org.ow2.asm:asm-util:9.3'
+    implementation 'org.ow2.asm:asm-tree:9.3'
+    implementation "com.android.tools.build:gradle:7.3.1", {
+        exclude group: 'org.ow2.asm'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.example.plugin'
+            artifactId = 'plugin'
+            version = '1.0.0'
+
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            //输出路径
+            url  = parent.layout.projectDirectory.dir('repo') // settings.gradle 记得配置
+        }
+    }
+}
